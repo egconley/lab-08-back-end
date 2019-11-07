@@ -22,6 +22,8 @@ app.get('/weather', weatherHandler);
 app.use('*', notFoundHandler);
 app.use(errorHandler);
 
+let locations = {};
+
 function locationHandler(request,response) {
   const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${request.query.data}&key=${process.env.GEOCODE_API_KEY}`;
   console.log(locations[url]);
@@ -35,6 +37,13 @@ function locationHandler(request,response) {
       .then(data => {
         const geoData = data.body;
         const location = new Location(request.query.data, geoData);
+        let latitude = location.latitude;
+        let longitude = location.longitude;
+        let SQL = `INSERT INTO location_table (latitude, longitude) VALUES ($1, $2) RETURNING *`;
+        let safeValues = [latitude, longitude];
+        client.query(SQL, safeValues).then( results => {
+          response.status(200).json(results);
+        }).catch( err => console.error(err));
         locations[url] = location;
         response.send(location);
       })
