@@ -19,6 +19,7 @@ client.on('err', err => { throw err; });
 // Route Definitions
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
+app.get('/location_table', tableHandler);
 app.use('*', notFoundHandler);
 app.use(errorHandler);
 
@@ -51,6 +52,15 @@ function locationHandler(request,response) {
         errorHandler(`So sorry, something went wrong. url: ${url}`, request, response);
       });
   }
+}
+
+function tableHandler(req, res) {
+  let SQL = `SELECT * FROM location_table`;
+  client.query(SQL)
+    .then( results => {
+      res.status(200).json(results.rows);
+    })
+    .catch( err => console.err(err));
 }
 
 function Location(query, geoData) {
