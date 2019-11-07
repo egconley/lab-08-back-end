@@ -40,8 +40,9 @@ function locationHandler(request,response) {
         const location = new Location(request.query.data, geoData);
         let latitude = location.latitude;
         let longitude = location.longitude;
-        let SQL = `INSERT INTO location_table (latitude, longitude) VALUES ($1, $2) RETURNING *`;
-        let safeValues = [latitude, longitude];
+        let place_id = location.place_id;
+        let SQL = `INSERT INTO location_table (latitude, longitude, place_id) VALUES ($1, $2, $3) RETURNING *`;
+        let safeValues = [latitude, longitude, place_id];
         client.query(SQL, safeValues).then( results => {
           response.status(200).json(results);
         }).catch( err => console.error(err));
@@ -53,6 +54,8 @@ function locationHandler(request,response) {
       });
   }
 }
+
+
 
 function tableHandler(req, res) {
   let SQL = `SELECT * FROM location_table`;
@@ -68,6 +71,7 @@ function Location(query, geoData) {
   this.formatted_query = geoData.results[0].formatted_address;
   this.latitude = geoData.results[0].geometry.location.lat;
   this.longitude = geoData.results[0].geometry.location.lng;
+  this.place_id = geoData.results[0].place_id;
 }
 
 function weatherHandler(request,response) {
