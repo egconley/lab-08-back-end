@@ -19,7 +19,6 @@ client.on('err', err => { throw err; });
 // Route Definitions
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
-app.get('/business', yelpHandler);
 app.use('*', notFoundHandler);
 app.use(errorHandler);
 
