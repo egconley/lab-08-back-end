@@ -9,8 +9,8 @@ const app = express();
 const PORT = process.env.PORT;
 
 // DB setup
-// const client = new pg.Client(process.env.DATABASE_URL);
-// client.on('err', err => { throw err; });
+const client = new pg.Client(process.env.DATABASE_URL);
+client.on('err', err => { throw err; });
 
 // app.get('/', (req, res) => {
 //   res.status(200).json({ name: 'brian ' });
@@ -38,12 +38,12 @@ const PORT = process.env.PORT;
 //     .catch(err => console.err(err));
 // })
 
-// client.connect()
-//   .then(() => {
+client.connect()
+  .then(() => {
     app.listen(PORT, () => {
       console.log(`listening on ${PORT}`);
     })
-  // })
-  // .catch(err => {
-  //   throw `PG startup error ${err.message}`
-  // })
+  })
+  .catch(err => {
+    throw `PG startup error ${err.message}`
+  })

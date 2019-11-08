@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS c301lab08;
+DROP TABLE IF EXISTS testlab08;
 
-CREATE TABLE c301lab08 (
+CREATE TABLE lab8 (
     id SERIAL PRIMARY KEY,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255)
+    latitude VARCHAR(55),
+    longitude VARCHAR(55)
 );
